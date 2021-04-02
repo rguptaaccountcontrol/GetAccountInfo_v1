@@ -1,7 +1,7 @@
 {
-    "friendlyName" : "GetAccountInfo",
+    "friendlyName" : "GetAccountInfo_v1",
     "logQueries" : true,
-    "uniqueName" : "GetAccountInfo",
+    "uniqueName" : "GetAccountInfo_v1",
     "defaults" : {
         "defaults" : {
             "assistant_initiation" : "task://greeting",
