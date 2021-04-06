@@ -13,7 +13,15 @@ exports.greeting_task = async function (context, event, callback, RB) {
   let Handoff = false;
 
   const Memory = JSON.parse(event.Memory);
+  //let channel = Memory.channel;
+  let namespace = "RED";//Memory.namespace;
   Remember.userData = "";
+  Remember.channel = Memory.InChannel;
+  Remember.host = Memory.Host;
+  Remember.namespace = Memory.NameSpace;
+  Remember.F_Letter_Namespace = (Remember.namespace.charAt(0));
+  //Remember.ClientName = "";
+  Remember.Agent = false;
   // Remember.clientName = "";
   // Remember.mailingAddress = "";
   // Remember.OnlinePaymentURL = "";
@@ -25,38 +33,40 @@ exports.greeting_task = async function (context, event, callback, RB) {
   // Remember.F_Letter_Namespace = "";
   // Remember.AccountFrom = "";
 
-  // Remember.FullName = "";
-  // Remember.ZipCd = "";
-  // Remember.SSNLastFour = "";
-  // Remember.accountNumber =  "";
-  // Remember.accountStatus =  "";
-  // Remember.TotalBalance =  "";
-  // Remember.RouteBalance =  "";
-  // Remember.AutomatedCCFlag =  "";	
-  // Remember.AutomatedCCFee =  "";
-  // Remember.AutomatedACHFlag =  "";
-  // Remember.AutomatedACHFee =  "";	
-  // Remember.ClientClass =  "";
-  // Remember.ClientAcct =  "";
-  // Remember.ClientID =  "";		
-  // Remember.PhoneNum =  "";	
-  // Remember.Disposition =  "";	
-  // Remember.LastPayDate =  "";	
-  // Remember.LastPayAmnt =  "";	
-  // Remember.SeedAcct =  "";	
-  // Remember.ADD1 =  "";	
-  // Remember.ADD2 =  "";	
-  // Remember.CITY =  "";	
-  // Remember.STATE =  "";	
-  // Remember.Status =  "";
-
+  Remember.FullName = "";
+  Remember.ZipCd = "";
+  Remember.SSNLastFour = "";
+  Remember.accountNumber = "";
+  Remember.accountStatus = "";
+  Remember.TotalBalance = "";
+  Remember.RouteBalance = "";
+  Remember.AutomatedCCFlag = "";
+  Remember.AutomatedCCFee = "";
+  Remember.AutomatedACHFlag = "";
+  Remember.AutomatedACHFee = "";
+  Remember.ClientClass = "";
+  Remember.ClientAcct = "";
+  Remember.ClientID = "";
+  Remember.PhoneNum = "";
+  Remember.Disposition = "";
+  Remember.LastPayDate = "";
+  Remember.LastPayAmnt = "";
+  Remember.SeedAcct = "";
+  Remember.ADD1 = "";
+  Remember.ADD2 = "";
+  Remember.CITY = "";
+  Remember.STATE = "";
+  Remember.Status = "";
+  Remember.PayArrangeFlag = "",
+  Remember.SIFAmount = "";
+  
   let userPhoneNumber;
   let TFN;
   try {
     userPhoneNumber = Memory.twilio.voice.From;
   }
   catch {
-    userPhoneNumber = "+13109025157";
+    userPhoneNumber = "+131090251579";
   }
 
   try {
@@ -66,7 +76,7 @@ exports.greeting_task = async function (context, event, callback, RB) {
     TFN = "8777215502";
   }
 
-  Remember.Agent = false;
+
   console.log("userPhoneNumber :" + userPhoneNumber);
   Remember.CurrentTask = "greeting";
   Remember.AccountFrom = "-1";
@@ -118,13 +128,14 @@ exports.greeting_task = async function (context, event, callback, RB) {
   // Remember.F_Letter_Namespace = (clientRespData.NameSpace.charAt(0));
 
   Remember.AccountFrom = "Phone";
-  Redirect = true;
-
+  //Redirect = true;
+  //Say = `Thank you for calling. ${Remember.ClientName} `;
+  
   if (userPhoneNumber != null && userPhoneNumber != "") {
     const reqData = {
       accountNumber: userPhoneNumber,
-      namespace: Remember.clientData.namespace,
-      host: Remember.clientData.host,
+      namespace: Remember.namespace,
+      host: Remember.host,
       callerPhoneNumber: Remember.user_phone_number,
       TFN: TFN
     };
@@ -164,31 +175,32 @@ exports.greeting_task = async function (context, event, callback, RB) {
       };
       console.log("userData:" + JSON.stringify(userData));
       Remember.userData = userData;
-
-      // Remember.FullName = userRespData.FullName;
-      // Remember.ZipCd = userRespData.ZipCd;
-      // Remember.SSNLastFour = userRespData.SSNLastFour;
-      // Remember.accountNumber =  userRespData.SeedAcct;
-      // Remember.accountStatus =  userRespData.AccStatus === '1' ? true : false;
-      // Remember.userTotalBalance =  userRespData.TotalBalance;
-      // Remember.RouteBalance =  userRespData.RouteBalance;
-      // Remember.AutomatedCCFlag =  userRespData.AutomatedCCFlag;	
-      // Remember.AutomatedCCFee =  userRespData.AutomatedCCFee;
-      // Remember.AutomatedACHFlag =  userRespData.AutomatedACHFlag;
-      // Remember.AutomatedACHFee =  userRespData.AutomatedACHFee;	
-      // Remember.ClientClass =  userRespData.ClientClass;
-      // Remember.ClientAcct =  userRespData.ClientAcct;
-      // Remember.ClientID =  userRespData.ClientID;		
-      // Remember.PhoneNum =  userRespData.PhoneNum;	
-      // Remember.Disposition =  userRespData.Disposition;	
-      // Remember.LastPayDate =  userRespData.LastPayDate;	
-      // Remember.LastPayAmnt =  userRespData.LastPayAmnt;	
-      // Remember.SeedAcct =  userRespData.SeedAcct;	
-      // Remember.ADD1 =  userRespData.Address1;	
-      // Remember.ADD2 =  userRespData.Address2;	
-      // Remember.CITY =  userRespData.City;	
-      // Remember.STATE =  userRespData.State;	
-      // Remember.Status =  userRespData.Status.toString();	
+      Remember.FullName = userRespData.FullName;
+      Remember.ZipCd = userRespData.ZipCd;
+      Remember.SSNLastFour = userRespData.SSNLastFour;
+      Remember.accountNumber = userRespData.SeedAcct;
+      Remember.accountStatus = userRespData.AccStatus === '1' ? true : false;
+      Remember.userTotalBalance = userRespData.TotalBalance;
+      Remember.RouteBalance = userRespData.RouteBalance;
+      Remember.AutomatedCCFlag = userRespData.AutomatedCCFlag;
+      Remember.AutomatedCCFee = userRespData.AutomatedCCFee;
+      Remember.AutomatedACHFlag = userRespData.AutomatedACHFlag;
+      Remember.AutomatedACHFee = userRespData.AutomatedACHFee;
+      Remember.ClientClass = userRespData.ClientClass;
+      Remember.ClientAcct = userRespData.ClientAcct;
+      Remember.ClientID = userRespData.ClientID;
+      Remember.PhoneNum = userRespData.PhoneNum;
+      Remember.Disposition = userRespData.Disposition;
+      Remember.LastPayDate = userRespData.LastPayDate;
+      Remember.LastPayAmnt = userRespData.LastPayAmnt;
+      Remember.SeedAcct = userRespData.SeedAcct;
+      Remember.ADD1 = userRespData.Address1;
+      Remember.ADD2 = userRespData.Address2;
+      Remember.CITY = userRespData.City;
+      Remember.STATE = userRespData.State;
+      Remember.Status = userRespData.Status.toString();
+      Remember.PayArrangeFlag = userRespData.PayArrangeFlag;
+      Remember.SIFAmount = userRespData.SIFAmount;
 
       if (userData.accountStatus) {
         console.log("accountStatus true:");
@@ -206,6 +218,7 @@ exports.greeting_task = async function (context, event, callback, RB) {
     }
   }
   else {
+    // we need to agent transfer if phone number null
     console.log("phone number not found record :");
     Redirect = "task://getAccount";
   }
