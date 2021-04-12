@@ -13,25 +13,12 @@ exports.greeting_task = async function (context, event, callback, RB) {
   let Handoff = false;
 
   const Memory = JSON.parse(event.Memory);
-  //let channel = Memory.channel;
-  let namespace = "RED";//Memory.namespace;
-  Remember.userData = "";
-  Remember.channel = Memory.InChannel;
-  Remember.host = Memory.Host;
-  Remember.namespace = Memory.NameSpace;
-  Remember.F_Letter_Namespace = (Remember.namespace.charAt(0));
-  //Remember.ClientName = "";
   Remember.Agent = false;
-  // Remember.clientName = "";
-  // Remember.mailingAddress = "";
-  // Remember.OnlinePaymentURL = "";
-  // Remember.transferAgentNumber = "";
-  // Remember.namespace = "";
-  // Remember.channel = "";
-  // Remember.host = "";
-  // Remember.TFN = "";
-  // Remember.F_Letter_Namespace = "";
-  // Remember.AccountFrom = "";
+  Remember.userData = "";
+  Remember.channel = "";
+  Remember.host = "";
+  Remember.namespace = "";
+  Remember.F_Letter_Namespace = "";
 
   Remember.FullName = "";
   Remember.ZipCd = "";
@@ -57,9 +44,9 @@ exports.greeting_task = async function (context, event, callback, RB) {
   Remember.CITY = "";
   Remember.STATE = "";
   Remember.Status = "";
-  Remember.PayArrangeFlag = "",
+  Remember.PayArrangeFlag = "";
   Remember.SIFAmount = "";
-  
+
   let userPhoneNumber;
   let TFN;
   try {
@@ -75,7 +62,33 @@ exports.greeting_task = async function (context, event, callback, RB) {
   catch {
     TFN = "8777215502";
   }
+  // if (Memory.twilio.voice.From != undefined)
+  //   userPhoneNumber = Memory.twilio.voice.From;
+  // else
+  //   userPhoneNumber = "+131090251579";
+  // if (Memory.twilio.voice.To != undefined)
+  //   TFN = Memory.twilio.voice.To;
+  // else
+  //   TFN = "+131090251579";
 
+  if (Memory.channel != undefined)
+    Remember.channel = Memory.channel;
+  else
+    Remember.channel = "SendGrid Email";
+
+  if (Memory.Host != undefined)
+    Remember.host = Memory.Host;
+  else
+    Remember.host = "FACS";
+
+  if (Memory.NameSpace != undefined) {
+    Remember.namespace = Memory.NameSpace;
+    Remember.F_Letter_Namespace = (Remember.namespace.charAt(0));
+  }
+  else {
+    Remember.namespace = "RED";
+    Remember.F_Letter_Namespace = "R";
+  }
 
   console.log("userPhoneNumber :" + userPhoneNumber);
   Remember.CurrentTask = "greeting";
@@ -130,7 +143,7 @@ exports.greeting_task = async function (context, event, callback, RB) {
   Remember.AccountFrom = "Phone";
   //Redirect = true;
   //Say = `Thank you for calling. ${Remember.ClientName} `;
-  
+
   if (userPhoneNumber != null && userPhoneNumber != "") {
     const reqData = {
       accountNumber: userPhoneNumber,
