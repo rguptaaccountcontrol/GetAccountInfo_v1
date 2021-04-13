@@ -215,7 +215,11 @@ exports.greeting_task = async function (context, event, callback, RB) {
       Remember.PayArrangeFlag = userRespData.PayArrangeFlag;
       Remember.SIFAmount = userRespData.SIFAmount;
 
-      if (userData.accountStatus) {
+      if (userRespData.RouteBalance == "0") {
+        console.log("Zero Balance:");
+        Redirect = "task://agent_transfer";
+      }
+      else if (userData.accountStatus) {
         console.log("accountStatus true:");
         Redirect = "task://check_name_task";
       }

@@ -199,7 +199,12 @@ exports.getAccount_task = async function (context, event, callback, RB) {
       Listen = false;
       Redirect = true;
       Remember.AccountFailed_Counter = 0;
-      if (userData.accountStatus) {
+
+      if (userRespData.RouteBalance == "0") {
+        console.log("Zero Balance:");
+        Redirect = "task://agent_transfer";
+      }
+      else if (userData.accountStatus) {
         console.log("accountStatus true:");
         Redirect = "task://check_name_task";
       }
