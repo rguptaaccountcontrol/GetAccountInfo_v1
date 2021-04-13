@@ -43,7 +43,6 @@ exports.yes_no_task = async function (context, event, callback, RB) {
           Redirect = "task://ZipOrSSN_Taks";
         } else if (event.Field_yes_no_Value === 'No' || YesNo === 'No') {
           Remember.check_name_task_yesno = "No";
-
           console.log(JSON.stringify(event.Memory));
           if (Memory.check_name_task_cnt >= 2) {
             Redirect = "task://agent_transfer";
