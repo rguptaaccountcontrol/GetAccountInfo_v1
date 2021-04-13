@@ -200,13 +200,15 @@ exports.getAccount_task = async function (context, event, callback, RB) {
       Redirect = true;
       Remember.AccountFailed_Counter = 0;
 
-      if (userRespData.RouteBalance == "0") {
-        console.log("Zero Balance:");
-        Redirect = "task://agent_transfer";
-      }
-      else if (userData.accountStatus) {
-        console.log("accountStatus true:");
-        Redirect = "task://check_name_task";
+      if (userData.accountStatus) {
+        if (userData.RouteBalance == "0.00" || userData.RouteBalance == "0") {
+          console.log("Zero Balance:");
+          Redirect = "task://agent_transfer";
+        }
+        else {
+          console.log("accountStatus true:");
+          Redirect = "task://check_name_task";
+        }
       }
       else // if account not active
       {

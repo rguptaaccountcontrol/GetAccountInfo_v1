@@ -53,7 +53,7 @@ exports.greeting_task = async function (context, event, callback, RB) {
     userPhoneNumber = Memory.twilio.voice.From;
   }
   catch {
-    userPhoneNumber = "+131090251579";
+    userPhoneNumber = "+13109025157";
   }
 
   try {
@@ -62,15 +62,7 @@ exports.greeting_task = async function (context, event, callback, RB) {
   catch {
     TFN = "8777215502";
   }
-  // if (Memory.twilio.voice.From != undefined)
-  //   userPhoneNumber = Memory.twilio.voice.From;
-  // else
-  //   userPhoneNumber = "+131090251579";
-  // if (Memory.twilio.voice.To != undefined)
-  //   TFN = Memory.twilio.voice.To;
-  // else
-  //   TFN = "+131090251579";
-
+  
   if (Memory.channel != undefined)
     Remember.channel = Memory.channel;
   else
@@ -93,56 +85,10 @@ exports.greeting_task = async function (context, event, callback, RB) {
   console.log("userPhoneNumber :" + userPhoneNumber);
   Remember.CurrentTask = "greeting";
   Remember.AccountFrom = "-1";
-
-  // let bTFn_success = false;
-  // if(TFN === undefined){
-  //   bTFn_success = false;
-  //   Say = `Thank you for calling. There was a problem with the call. `;
-  //   Listen = false;
-  //   Collect = false;
-  //   Redirect = true;
-  //   Redirect = `task://agent_transfer` ;
-  // }
-  // else{
   Remember.TFN = TFN;
   Remember.user_phone_number = userPhoneNumber;
   userPhoneNumber = userPhoneNumber.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
-  //const { success, clientRespData } = await TFN_Lookup(userPhoneNumber,TFN);
-  //console.log(clientRespData);
-
-  //if ( success ) {
-  //bTFn_success = true;
-  // const clientData = {
-  //   clientName: clientRespData.ClientName,
-  //   mailingAddress: clientRespData.MailingAddress,
-  //   webPaymentAddress: clientRespData.WebPaymentAddress,
-  //   transferAgentNumber: clientRespData.TransferAgentNumber,
-  //   namespace: clientRespData.NameSpace,
-  //   channel: clientRespData.Channel,
-  //   host: clientRespData.Host,
-  //   TFN: clientRespData.PhoneNumber,
-  //   user_phone_number: clientRespData.PhoneNumberTo,
-  //   F_Letter_Namespace: (clientRespData.NameSpace.charAt(0))
-  // };
-  // Say = true;
-  // Listen = false;
-  // Say = `Thank you for calling. ${clientRespData.ClientName} `;
-  // Remember.user_phone_number = clientRespData.PhoneNumberTo;
-  // Remember.clientData = clientData;
-
-  // Remember.clientName = clientRespData.ClientName;
-  // Remember.mailingAddress = clientRespData.MailingAddress;
-  // Remember.OnlinePaymentURL = clientRespData.WebPaymentAddress;
-  // Remember.transferAgentNumber = clientRespData.TransferAgentNumber;
-  // Remember.namespace = clientRespData.NameSpace;
-  // Remember.channel = clientRespData.Channel;
-  // Remember.host = clientRespData.Host;
-  // Remember.TFN = clientRespData.PhoneNumber;
-  // Remember.F_Letter_Namespace = (clientRespData.NameSpace.charAt(0));
-
   Remember.AccountFrom = "Phone";
-  //Redirect = true;
-  //Say = `Thank you for calling. ${Remember.ClientName} `;
 
   if (userPhoneNumber != null && userPhoneNumber != "") {
     const reqData = {
@@ -215,13 +161,15 @@ exports.greeting_task = async function (context, event, callback, RB) {
       Remember.PayArrangeFlag = userRespData.PayArrangeFlag;
       Remember.SIFAmount = userRespData.SIFAmount;
 
-      if (userRespData.RouteBalance == "0") {
-        console.log("Zero Balance:");
-        Redirect = "task://agent_transfer";
-      }
-      else if (userData.accountStatus) {
-        console.log("accountStatus true:");
-        Redirect = "task://check_name_task";
+      if (userData.accountStatus) {
+        if (userData.RouteBalance == "0.00" || userData.RouteBalance == "0") {
+          console.log("Zero Balance:");
+          Redirect = "task://agent_transfer";
+        }
+        else {
+          console.log("accountStatus true:");
+          Redirect = "task://check_name_task";
+        }
       }
       else {
         console.log("accountStatus false:");
@@ -240,41 +188,8 @@ exports.greeting_task = async function (context, event, callback, RB) {
     Redirect = "task://getAccount";
   }
 
-  //}
-  // else{
-  //   Say = `Thank you for calling. There was a problem with the call. `;
-  //   Listen = false;
-  //   Collect = false;
-  //   Redirect = true;
-  //   Redirect = `task://agent_transfer` ;
-  // }
-  //}
-
   RB(Say, Listen, Remember, Collect, Tasks, Redirect, Handoff, callback);
 };
-
-// const TFN_Lookup = async ( phoneNumber,TFN ) => {
-//   let clientRespData;
-//   let success;
-
-//   try {
-//     const requestObj = {
-//       PhoneNumber: TFN,
-//       PhoneNumberTo: phoneNumber
-//     };
-
-//     const responseObj = await axios.post(`${API_ENDPOINT}/TFN_LookUp`, requestObj);
-//     clientRespData = responseObj.data;
-//     success = clientRespData.Returns === '1' ? true : false;
-
-//   } catch ( error ) {
-//     console.error( error.response );
-//     success = false;
-//   }
-
-//   return { success, clientRespData };
-// };
-
 
 const GetInboundAccountInfoWithPhone = async (reqData) => {
   let userRespData;
