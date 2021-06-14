@@ -1,6 +1,6 @@
 const axios = require('axios');
 // This is your new function. To start, set the name and path on the left.
-const API_ENDPOINT = 'https://pecodeviis:Test123!@pecodev.convergentusa.com/Convergent_Main_IVR/Home';
+const API_ENDPOINT = 'https://pecodeviis:Test123!@pecodev.convergentusa.com/Convergent_Main_IVR_SIF/Home';
 
 exports.greeting_task = async function (context, event, callback, RB) {
   let Say;
